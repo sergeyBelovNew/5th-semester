@@ -11,6 +11,8 @@ int main() {
     hf.ShowAll();
     hf.SetAll();
     hf.ShowAll();
+    manager m = manager("fn", "ln", "j", 12);
+    m.ShowAll();
     return 0;
 }
 
