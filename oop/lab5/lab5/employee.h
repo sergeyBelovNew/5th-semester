@@ -1,5 +1,5 @@
 #pragma once
-#include "abstr_emp.h"
+
 class employee : public abstr_emp
 {
 public:

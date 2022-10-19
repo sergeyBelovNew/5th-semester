@@ -1,6 +1,4 @@
-#include <iostream>
-#include <string>
-#include <sstream>
+
 #include "abstr_emp.h"
 
 abstr_emp::abstr_emp()
