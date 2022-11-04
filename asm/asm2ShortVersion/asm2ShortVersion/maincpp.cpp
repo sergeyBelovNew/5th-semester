@@ -20,19 +20,10 @@ int main() {
 		Memo[i] = NULL;
 	}
 	//(c * 2 - d + 23)/( a / 4 - 1)
-	long long a = 5'678'901'234; //5'678'901'234;
-	long long b = 6'789'012'345; //6'789'012'345;
-	long long c = 7'890'123'456; //7'890'123'456;
-	long long d = 8'901'234'567; //8'901'234'567; 
-	long long e = 9'012'345'678; //9'012'345'678;
-	long long f = 10'123'456'789; //10'123'456'789;
-	//short
-	long long shortA = 5'678'901; //5'678'901;
-	long long shortB = 6'789'012; //6'789'012;
-	long long shortC = 7'890'123; //7'890'123;
-	long long shortD = 8'901'234; //8'901'234; 
-	long long shortE = 9'012'345; //9'012'345;
-	long long shortF = 10'123'456; //10'123'456;
+	long long a = 5'678'901'234; //5678901234; // 1 527D 27F2
+	long long c = 7'890'123'456; //7890123456; // 1 D649 BAC0
+	long long d = 8'901'234'567; //8901234567; // 2 128E 0F87
+
 	long long result = 0;
 
 	__asm {
@@ -40,29 +31,49 @@ int main() {
 		// c * 2 - d + 23
 
 		// c * 2
-		mov eax, dword ptr[shortC]
-		mov esi, 2
-		mul esi
+		mov eax, 890123456
+		mov ebx, 7
+		mov ecx, 2
+		mul ecx
+		imul ebx, ecx
+		mov edx, ebx
 
 		// c * 2 - d
-		mov esi, dword ptr[shortD]
-		sub eax, esi
-		//  c * 2 - d + 23
-		add eax, 23
-		mov ebx, eax
-		// a / 4 - 1
 
-		// a /  4
-		mov eax, dword ptr[shortA]
-		mov esi, 4
-		div esi
-		// a / 4 - 1
-		dec eax
-		xchg ebx, eax
-		//(c * 2 - d + 23)/( a / 4 - 1)
-		cdq
+		mov esi, 8
+		mov ecx, 901234567
+		sbb eax, ecx
+		sbb edx, esi
+
+		// c * 2 - d + 23
+
+		add  eax, 23
+		push eax
+		push edx
+
+		// a / 400 - 1
+		// a / 400
+
+		mov eax, 678901234
+		mov edx, 000000005
+		mov ecx, 400
+		div ecx
+
+		// a / 400 - 1
+
+		sbb eax, 1
+
+		// (c * 2 - d + 23)/( a / 4 - 1)
+
+		mov ebx, eax
+		pop edx
+		pop eax
 		div ebx
+
 		mov dword ptr[result], eax
+		lea eax, Memo
+		mov[eax], eax
+
 		popad
 	}
 
@@ -75,7 +86,7 @@ int main() {
 		}
 	}
 	std::cout << "\nResult: " << result;
-
-	_getch();
+	std::cout << "\nCaltulation answer:" << (7890123456 * 2 - 8901234567 + 23) / (5678901234 / 400 - 1);
+	
 	return 0;
 }
