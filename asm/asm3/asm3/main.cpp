@@ -3,11 +3,11 @@
 #include<iomanip>
 #include<sstream>
 #include<random>
+#include<ctime>
+
 using namespace std;
-
-
-const uint16_t MIN = 0x0;
-const uint16_t MAX = 0xFFFF;
+const uint16_t MIN = 0;
+const uint16_t MAX = 65535;
 
 uint16_t random() {
 	std::random_device rd;
@@ -18,45 +18,47 @@ uint16_t random() {
 }
 
 int main() {
-	unsigned short int data[512];
+	unsigned short int data[512] = {0};
+	int tempRandom = 0;
+	
 
 	__asm {
 		pushad
-		mov ebx, 0
-		mov ecx, 0
-		mov edx, 0
-		mov edi, 0
-
-		lea esi, data
+	
+	    mov ebx, 0
+	    mov ecx, 0
+		lea edi, tempRandom
 
 	loopStart:
-		cmp ebx, 128
+		xor esi, esi
+		lea esi, data
+		cmp bh, 128
 		je exitCycle
-		cmp ecx, 128
+		cmp bl, 128
 		je exitCycle
-		cmp edx, 128
+		cmp ch, 128
 		je exitCycle
-		cmp edi, 128
+		cmp cl, 128
 		je exitCycle
 
-		push ebx
 		push ecx
-		push edx
-		push edi
 		call random
-		pop edi
-		pop edx
 		pop ecx
-		pop ebx
+	    mov [edi], ax
+		
 
-		test eax,1
-		jae evenNum
-		jbe odd
+		test  eax, 1
+		jnz   odd			//Ќечетное, переход на метку Odd
+		jz    evenNum		//„етное, переход на метку Even
+
 
 	evenNum:
-		adc ebx, 1
-		adc esi, 2
-		mov [esi],eax
+		adc bh, 1
+		mov eax, 2 //дл€ вычислени€ сдвига
+		mul bh
+		adc esi, eax
+		mov eax, [edi]
+		mov [esi], eax
 
 		cmp eax, 50000
 		jae more50000
@@ -65,9 +67,13 @@ int main() {
 		jmp loopStart
 
 	odd:
-		adc ecx, 1
-		adc esi, 2
-		mov[esi], eax
+		lea esi, data
+		adc bl, 1
+		mov eax, 2 //дл€ вычислени€ сдвига
+		mul bl
+		adc esi, eax
+		mov eax, [edi]
+		mov[esi + 254], eax
 
 		cmp eax, 50000
 		jae more50000
@@ -76,22 +82,41 @@ int main() {
 		jmp loopStart
 
 	more50000:
-		adc edx, 1
+		xor esi, esi
+		lea esi, data
+		adc ch, 1
+		mov eax, 2
+		mul ch
+		adc esi, eax
+
+		mov eax, [edi]
+		mov[esi + 510], eax
+
 		jmp loopStart
 
 	less10000:
-		adc edi, 1
+		xor esi, esi 
+		lea esi, data
+		adc cl, 1
+		mov eax, 2
+		mul cl
+		adc esi, eax
+
+		mov eax, [edi]
+		mov[esi + 766], eax
+
 		jmp loopStart
 
 	exitCycle:
 
 		popad
 	}
+
 	cout << "Array\n";
 	for (int i = 0; i < 512; i++) {
 		cout << data[i]<<"  ";
-		if (i % 64 == 0)
-			cout << "\n";
+		if (i % 128 == 0)
+			cout << "\n\n\n";
 	}
 	return 0;
 }
