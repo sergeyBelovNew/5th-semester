@@ -29,10 +29,17 @@ int main() {
 	    mov ecx, 0
 		lea edi, tempRandom
 
+	loopStart:
+<<<<<<< HEAD
+		xor esi, esi
+		lea esi, data
+=======
+
+		xor esi, esi
 		lea esi, data
 
-	loopStart:
-		cmp ebx, 128
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
+		cmp bh, 127
 		je exitCycle
 		cmp bl, 128
 		je exitCycle
@@ -43,14 +50,15 @@ int main() {
 
 		push ecx
 		call random
-		pop edi
-		pop edx
+<<<<<<< HEAD
 		pop ecx
-		pop ebx
-
-		test eax,1
-		jae evenNum
-		jbe odd
+	    mov [edi], ax
+		
+=======
+		movzx eax, ax
+		pop ecx
+	    mov [edi], ax
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
 
 		test  eax, 1
 		jnz   odd			//Нечетное, переход на метку Odd
@@ -58,9 +66,21 @@ int main() {
 
 
 	evenNum:
-		adc ebx, 1
-		adc esi, 2
-		mov [esi],eax
+<<<<<<< HEAD
+		adc bh, 1
+		mov eax, 2 //для вычисления сдвига
+=======
+		
+		cmp [esi], 0
+		je firstEven
+
+		adc bh, 1
+		mov eax, 2          //для вычисления сдвига
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
+		mul bh
+		adc esi, eax
+		mov eax, [edi]
+		mov [esi], eax
 
 		cmp eax, 50000
 		jae more50000
@@ -69,12 +89,15 @@ int main() {
 		jmp loopStart
 
 	odd:
-		adc ecx, 1
-		adc esi, 2
-		mov[esi], eax
+<<<<<<< HEAD
+		lea esi, data
+		adc bl, 1
+		mov eax, 2 //для вычисления сдвига
+=======
 
 		adc bl, 1
 		mov eax, 2          //для вычисления сдвига
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
 		mul bl
 		adc esi, eax
 		mov eax, [edi]
@@ -87,11 +110,54 @@ int main() {
 		jmp loopStart
 
 	more50000:
-		adc edx, 1
+<<<<<<< HEAD
+		xor esi, esi
+		lea esi, data
+=======
+
+		xor esi, esi
+		lea esi, data
+
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
+		adc ch, 1
+		mov eax, 2
+		mul ch
+		adc esi, eax
+
+		mov eax, [edi]
+		mov[esi + 510], eax
+
 		jmp loopStart
 
 	less10000:
-		adc edi, 1
+<<<<<<< HEAD
+		xor esi, esi 
+		lea esi, data
+=======
+		
+		xor esi, esi
+		lea esi, data
+
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
+		adc cl, 1
+		mov eax, 2
+		mul cl
+		adc esi, eax
+
+		mov eax, [edi]
+		mov[esi + 766], eax
+
+		jmp loopStart
+
+	firstEven:
+
+		mov eax, [edi]
+		mov[esi], eax
+
+		cmp eax, 50000
+		jae more50000
+		cmp eax, 10000
+		jbe less10000
 		jmp loopStart
 	
 
@@ -99,13 +165,21 @@ int main() {
 
 		popad
 	}
+
+<<<<<<< HEAD
 	cout << "Array\n";
+=======
+	cout << "Array(0 - 127 even, 127 - 255 odd, 255 - 383 more than 50000, 383 - 511 \nless than 10000):";
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
 	for (int i = 0; i < 512; i++) {
 		if (i % 128 == 0)
 			cout << "\n\n\n";
 		cout << data[i]<<"  ";
-		if (i % 64 == 0)
-			cout << "\n";
+<<<<<<< HEAD
+		if (i % 128 == 0)
+			cout << "\n\n\n";
+=======
+>>>>>>> ac04179c5fe5d788412b913e535af28aa7e30ea3
 	}
 	return 0;
 }
