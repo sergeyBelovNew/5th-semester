@@ -29,10 +29,10 @@ int main() {
 	    mov ecx, 0
 		lea edi, tempRandom
 
-	loopStart:
-		xor esi, esi
 		lea esi, data
-		cmp bh, 128
+
+	loopStart:
+		cmp ebx, 128
 		je exitCycle
 		cmp bl, 128
 		je exitCycle
@@ -43,9 +43,14 @@ int main() {
 
 		push ecx
 		call random
+		pop edi
+		pop edx
 		pop ecx
-	    mov [edi], ax
-		
+		pop ebx
+
+		test eax,1
+		jae evenNum
+		jbe odd
 
 		test  eax, 1
 		jnz   odd			//Нечетное, переход на метку Odd
@@ -53,12 +58,9 @@ int main() {
 
 
 	evenNum:
-		adc bh, 1
-		mov eax, 2 //для вычисления сдвига
-		mul bh
-		adc esi, eax
-		mov eax, [edi]
-		mov [esi], eax
+		adc ebx, 1
+		adc esi, 2
+		mov [esi],eax
 
 		cmp eax, 50000
 		jae more50000
@@ -67,9 +69,12 @@ int main() {
 		jmp loopStart
 
 	odd:
-		lea esi, data
+		adc ecx, 1
+		adc esi, 2
+		mov[esi], eax
+
 		adc bl, 1
-		mov eax, 2 //для вычисления сдвига
+		mov eax, 2          //для вычисления сдвига
 		mul bl
 		adc esi, eax
 		mov eax, [edi]
@@ -82,41 +87,25 @@ int main() {
 		jmp loopStart
 
 	more50000:
-		xor esi, esi
-		lea esi, data
-		adc ch, 1
-		mov eax, 2
-		mul ch
-		adc esi, eax
-
-		mov eax, [edi]
-		mov[esi + 510], eax
-
+		adc edx, 1
 		jmp loopStart
 
 	less10000:
-		xor esi, esi 
-		lea esi, data
-		adc cl, 1
-		mov eax, 2
-		mul cl
-		adc esi, eax
-
-		mov eax, [edi]
-		mov[esi + 766], eax
-
+		adc edi, 1
 		jmp loopStart
+	
 
 	exitCycle:
 
 		popad
 	}
-
 	cout << "Array\n";
 	for (int i = 0; i < 512; i++) {
-		cout << data[i]<<"  ";
 		if (i % 128 == 0)
 			cout << "\n\n\n";
+		cout << data[i]<<"  ";
+		if (i % 64 == 0)
+			cout << "\n";
 	}
 	return 0;
 }
