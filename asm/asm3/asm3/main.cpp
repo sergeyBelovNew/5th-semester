@@ -31,17 +31,17 @@ int main() {
 
 		loopStart :
 
-		xor esi, esi
+		    xor esi, esi
 			lea esi, data
 
-			cmp bh, 127
-			je exitCycle
+			cmp bh, 128
+			jae exitCycle
 			cmp bl, 128
-			je exitCycle
+			jae exitCycle
 			cmp ch, 128
-			je exitCycle
+			jae exitCycle
 			cmp cl, 128
-			je exitCycle
+			jae exitCycle
 
 			push ecx
 			call random
@@ -54,17 +54,14 @@ int main() {
 			jz    evenNum
 
 
-			evenNum :
+		evenNum :
 
-		cmp[esi], 0
-			je firstEven
-
-			adc bh, 1
 			mov eax, 2
 			mul bh
 			adc esi, eax
 			mov eax, [edi]
 			mov[esi], eax
+			adc bh, 1
 
 			cmp eax, 50000
 			jae more50000
@@ -72,14 +69,14 @@ int main() {
 			jbe less10000
 			jmp loopStart
 
-			odd :
+		odd :
 
-		adc bl, 1
 			mov eax, 2
 			mul bl
 			adc esi, eax
 			mov eax, [edi]
-			mov[esi + 254], eax
+			mov[esi + 256], eax
+			adc bl, 1
 
 			cmp eax, 50000
 			jae more50000
@@ -87,47 +84,33 @@ int main() {
 			jbe less10000
 			jmp loopStart
 
-			more50000 :
+		more50000 :
 
-		xor esi, esi
+		    xor esi, esi
 			lea esi, data
-
-			adc ch, 1
+			
 			mov eax, 2
 			mul ch
 			adc esi, eax
-
 			mov eax, [edi]
-			mov[esi + 510], eax
+			mov [esi + 512], eax
+			adc ch, 1
 
 			jmp loopStart
 
-			less10000 :
+		less10000 :
 
-		xor esi, esi
+		    xor esi, esi
 			lea esi, data
-
-			adc cl, 1
+			
 			mov eax, 2
 			mul cl
 			adc esi, eax
-
 			mov eax, [edi]
-			mov[esi + 766], eax
+			mov [esi + 768], eax
+			adc cl, 1
 
 			jmp loopStart
-
-			firstEven :
-
-		mov eax, [edi]
-			mov[esi], eax
-
-			cmp eax, 50000
-			jae more50000
-			cmp eax, 10000
-			jbe less10000
-			jmp loopStart
-
 
 			exitCycle :
 
