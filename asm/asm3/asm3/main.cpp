@@ -53,47 +53,44 @@ int main() {
 			jnz   odd
 			jz    evenNum
 
+		evenNum:
 
-		evenNum :
-
-			mov eax, 2
+		    mov eax, 2
 			mul bh
 			adc esi, eax
 			mov eax, [edi]
-			mov[esi], eax
+			mov[esi], ax
 			adc bh, 1
+			jmp moreLessCmp
 
-			cmp eax, 50000
-			jae more50000
-			cmp eax, 10000
-			jbe less10000
-			jmp loopStart
+		odd:
 
-		odd :
-
-			mov eax, 2
+		    mov eax, 2
 			mul bl
 			adc esi, eax
 			mov eax, [edi]
-			mov[esi + 256], eax
+			mov[esi + 256], ax
 			adc bl, 1
-
+			jmp moreLessCmp
+			
+		moreLessCmp:
+			
 			cmp eax, 50000
 			jae more50000
 			cmp eax, 10000
 			jbe less10000
 			jmp loopStart
 
-		more50000 :
+		more50000:
 
 		    xor esi, esi
 			lea esi, data
-			
+
 			mov eax, 2
 			mul ch
 			adc esi, eax
 			mov eax, [edi]
-			mov [esi + 512], eax
+			mov[esi + 512], ax
 			adc ch, 1
 
 			jmp loopStart
@@ -102,17 +99,17 @@ int main() {
 
 		    xor esi, esi
 			lea esi, data
-			
+
 			mov eax, 2
 			mul cl
 			adc esi, eax
 			mov eax, [edi]
-			mov [esi + 768], eax
+			mov[esi + 768], ax
 			adc cl, 1
 
 			jmp loopStart
 
-			exitCycle :
+		exitCycle :
 
 		popad
 	}
