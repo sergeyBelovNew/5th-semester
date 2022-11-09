@@ -11,9 +11,9 @@ int main() {
 	uint32_t number = 0xDEFBCDEF;
 
 	unsigned char numberOnes = 0;
-	unsigned char numberZeroes = 0;
+	int numberZeroes = 0;
 	unsigned char numberOnes2 = 0;
-	unsigned char numberZeroes2 = 0;
+	int numberZeroes2 = 0;
     
 	__asm {
 		pushad
@@ -25,6 +25,7 @@ int main() {
 
 	calculationShr:
 		
+		clc
 		inc ecx
 		shr ebx, 1     //shift of bits to 1 left(equel of div 2)
 		jc  onesIncrem
@@ -54,11 +55,13 @@ int main() {
 		mov [esi], al
         mov ecx, 0
 		mov eax, 0
+		lea ebx, number
+		mov ebx, [ebx]
+
 
 	calculationShl:
 
 		clc
-		cld
 		inc ecx
 		shl ebx, 1     
 		jc  onesIncrem2
@@ -90,13 +93,13 @@ int main() {
 		popad
 	}
 
-	numberZeroes = 32 - numberOnes;
-	numberZeroes2 = 32 - numberOnes2;
+	numberZeroes = 32 - (int)numberOnes;
+	numberZeroes2 = 32 - (int)numberOnes2;
 
 	std::cout << "Number " << "11011110111110111100110111101111" << "\nNumber of zeroes: " 
-		      << (int)numberZeroes << "\nNumber of ones: " << (int)numberOnes;
+		      << numberZeroes << "\nNumber of ones: " << (int)numberOnes;
 	std::cout << "\nSecond way:" << "\nNumber of zeroes: "
-		<< (int)numberZeroes2 << "\nNumber of ones: " << (int)numberOnes2;
+		<< numberZeroes2 << "\nNumber of ones: " << (int)numberOnes2;
 
 	return 0;
 }
