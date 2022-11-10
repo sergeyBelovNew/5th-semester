@@ -3,9 +3,6 @@
 #include <iomanip>
 #include <sstream>
 
-
-
-
 int main() {
 	
 	uint32_t number = 0xDEFBCDEF;
@@ -14,7 +11,9 @@ int main() {
 	int numberZeroes = 0;
 	unsigned char numberOnes2 = 0;
 	int numberZeroes2 = 0;
-    
+	int numberPairOnes = 0;
+	int numberPairZeroes = 0;
+
 	__asm {
 		pushad
 		
@@ -22,30 +21,25 @@ int main() {
 		mov eax, 0 //Counter of ones
 		lea ebx, number
 		mov ebx, [ebx]
-
-	calculationShr:
 		
-		clc
+	calculationRol:
+		
 		inc ecx
-		shr ebx, 1     //shift of bits to 1 left(equel of div 2)
+		rol ebx, 1     //shift of bits to 1 left(equel of div 2)
 		jc  onesIncrem
 		jnc  zeroChooseExit1
 
 	onesIncrem:
 		
 		inc eax
-		clc
-		cld
 		cmp ecx, 32
-		jb calculationShr
+		jb calculationRol
 		je exitCalculation1
 
 	zeroChooseExit1:
 		
-		clc
-		cld
 		cmp ecx, 32
-		jb calculationShr
+		jb calculationRol
 		je exitCalculation1
 
 	exitCalculation1:
@@ -55,33 +49,25 @@ int main() {
 		mov [esi], al
         mov ecx, 0
 		mov eax, 0
-		lea ebx, number
-		mov ebx, [ebx]
 
+	calculationBt:
 
-	calculationShl:
-
-		clc
+		bt ebx, ecx
 		inc ecx
-		shl ebx, 1     
 		jc  onesIncrem2
 		jnc zeroChooseExit2
 
 	onesIncrem2:
 	
 		inc eax
-		clc
-		cld
 		cmp ecx, 32
-		jb calculationShl
+		jb calculationBt
 		je exitCalculation2
 
 	zeroChooseExit2:
 		
-		clc
-		cld
 		cmp ecx, 32
-		jb calculationShl
+		jb calculationBt
 		je exitCalculation2
 			
 	exitCalculation2:
@@ -89,6 +75,59 @@ int main() {
 		mov esi, 0
 		lea esi, numberOnes2
 		mov[esi], al
+		mov esi, 0
+		mov edi, 0
+		mov ecx, 0
+
+    // 3 task
+	calculationPair:
+		
+		cmp ecx, 32
+		je exitCalculationPair
+
+		bt ebx, ecx
+		inc ecx
+		jc  firstOne
+		jnc firstZero
+
+	firstOne:
+
+		bt ebx, ecx
+		inc ecx
+		jc  incPairOne
+		jmp calculationPair
+
+	firstZero :
+
+		bt ebx, ecx
+		inc ecx
+		jnc incPairZero
+		jmp calculationPair
+
+	incPairOne:
+		
+		inc esi
+        jmp  calculationPair
+			
+	incPairZero:
+
+		inc edi
+        jmp  calculationPair
+
+	exitCalculationPair:
+
+		lea edx, numberPairOnes
+		mov [edx], esi
+		lea edx, numberPairZeroes
+		mov [edx], edi
+
+		mov ecx, 0
+		mov esi, 0
+		mov edi, 0
+	//task4
+
+		
+		
 
 		popad
 	}
@@ -96,10 +135,11 @@ int main() {
 	numberZeroes = 32 - (int)numberOnes;
 	numberZeroes2 = 32 - (int)numberOnes2;
 
-	std::cout << "Number " << "11011110111110111100110111101111" << "\nNumber of zeroes: " 
+	std::cout << "Number " << "1101 1110 1111 1011 1100 1101 1110 1111" << "\nNumber of zeroes: " 
 		      << numberZeroes << "\nNumber of ones: " << (int)numberOnes;
 	std::cout << "\nSecond way:" << "\nNumber of zeroes: "
-		<< numberZeroes2 << "\nNumber of ones: " << (int)numberOnes2;
+		      << numberZeroes2 << "\nNumber of ones: " << (int)numberOnes2;
+	std::cout << "\nNumber of pairs: " << "\nZeroes: " << numberPairZeroes << "\nOnes: " << numberPairOnes;
 
 	return 0;
 }
