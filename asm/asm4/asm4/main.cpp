@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <conio.h>
 #include <iomanip>
 #include <sstream>
@@ -6,18 +6,18 @@
 int transferDouble(int classicNumber) {
 	int newNumber = 0;
 	int k = 1;
-	while (classicNumber) //пока а!=0
+	while (classicNumber) 
 	{
-		newNumber += classicNumber % 2 * k; //двоичное число = остаток от деления десятичного 
-		//числа на 2 (это, думаю, понятно) * k (разряд) +то, что было в b
-		classicNumber /= 2; //само деление а на 2
-		k *= 10; //увеличение разряда
+		newNumber += classicNumber % 2 * k; 
+		
+		classicNumber /= 2;
+		k *= 10; 
 	}
 	return newNumber;
 }
 
 int main() {
-	
+
 	uint32_t number = 0xDEFBCDEF;
 
 	unsigned char numberOnes = 0;
@@ -38,7 +38,7 @@ int main() {
 		mov eax, 0 //Counter of ones
 		lea ebx, number
 		mov ebx, [ebx]
-		
+
 		calculationRol:
 
 		    inc ecx
@@ -89,16 +89,16 @@ int main() {
 
 		exitCalculation2:
 
-		    mov esi, 0
+		    mov ecx, 0
 			lea esi, numberOnes2
 			mov[esi], al
 			mov esi, 0
 			mov edi, 0
-			mov ecx, 0
-
-			// 3 task
+			
+			// 3 task 1101 1110 1111 1011 1100 1101 1110 1111
 		calculationPair:
-
+		    
+		    
 		    cmp ecx, 32
 			je exitCalculationPair
 
@@ -110,24 +110,23 @@ int main() {
 		firstOne:
 
 		    bt ebx, ecx
-			inc ecx
 			jc  incPairOne
 			jmp calculationPair
 
 		firstZero:
 
 		    bt ebx, ecx
-			inc ecx
 			jnc incPairZero
 			jmp calculationPair
 
 		incPairOne:
-
-		    inc esi
-			jmp  calculationPair
+			inc ecx
+			inc esi
+		    jmp  calculationPair
 
 		incPairZero:
-
+			
+			inc ecx
 		    inc edi
 			jmp  calculationPair
 
@@ -137,8 +136,8 @@ int main() {
 			mov[edx], esi
 			lea edx, numberPairZeroes
 			mov[edx], edi
-				
-	//task4 (bad way, without buff mas)
+
+			//task4 (bad way, without buff mas)
 
 			mov al, bl
 			mov ecx, 1
@@ -147,10 +146,10 @@ int main() {
 
 			//1110 1111
 		startExchangeFirstHalf:
-			
-			inc cx
+
+		    inc cx
 			dec dl
-		    cmp dl, 3
+			cmp dl, 3
 			je exitExchange
 
 			bt bl, dl
@@ -159,33 +158,33 @@ int main() {
 
 		byteOne:
 
-			btr bl, dl
-		    bt bl, cl
+		    btr bl, dl
+			bt bl, cl
 			jnc changeBit
 			jmp startExchangeFirstHalf
 
 		byteZero:
 
-			bt bl, cl
+		    bt bl, cl
 			jc far changeBit
 			jmp startExchangeFirstHalf
 
 		changeBit:
-			
-			btc bl, cl
+
+		    btc bl, cl
 			jmp startExchangeFirstHalf
 
 		exitExchange:
-		
-			lea esi, temp1
-			mov [esi], bl
-		    mov ecx, 1
+
+		    lea esi, temp1
+			mov[esi], bl
+			mov ecx, 1
 			neg ecx
 			mov edx, 8
 
 		startExchangeSecondHalf:
 
-			inc cx
+		    inc cx
 			dec dl
 			cld
 			cmp cl, 4
@@ -197,43 +196,43 @@ int main() {
 
 		byteOne2:
 
-			btr al, cl
+		    btr al, cl
 			bt al, dl
 			jnc changeBit2
 			jmp startExchangeSecondHalf
 
 		byteZero2:
 
-			bt al , dl
+		    bt al, dl
 			jc changeBit2
 			jmp startExchangeSecondHalf
 
 		changeBit2:
-  
-			btc al, dl
+
+		    btc al, dl
 			jmp startExchangeSecondHalf
 
 		finalExit1:
-		   
-			lea edi, temp2
+
+		    lea edi, temp2
 			mov[edi], al
 			mov al, [edi]
 			mov bl, [esi]
-		    adc bl, al
+			adc bl, al
 			lea esi, invertionByte
-			mov [esi], bl
+			mov[esi], bl
 
-		popad
+			popad
 	}
 
 	numberZeroes = 32 - (int)numberOnes;
 	numberZeroes2 = 32 - (int)numberOnes2;
-	std::cout << "Number " << "1101 1110 1111 1011 1100 1101 1110 1111" << "\nNumber of zeroes: " 
-		      << numberZeroes << "\nNumber of ones: " << (int)numberOnes;
+	std::cout << "Number " << "1101 1110 1111 1011 1100 1101 1110 1111" << "\nNumber of zeroes: "
+		<< numberZeroes << "\nNumber of ones: " << (int)numberOnes;
 	std::cout << "\nSecond way:" << "\nNumber of zeroes: "
-		      << numberZeroes2 << "\nNumber of ones: " << (int)numberOnes2;
+		<< numberZeroes2 << "\nNumber of ones: " << (int)numberOnes2;
 	std::cout << "\nNumber of pairs: " << "\nZeroes: " << numberPairZeroes << "\nOnes: " << numberPairOnes;
-	std::cout << "\nInvertion: " << "\nOriginal: 1110 1111:"  << "\nInvertion: " << transferDouble((int)invertionByte);
+	std::cout << "\nInvertion: " << "\nOriginal: 1110 1111:" << "\nInvertion: " << transferDouble((int)invertionByte);
 	std::cout << "\nFirst half byte: " << transferDouble((int)temp1) << "\nSecond half byte: " << transferDouble((int)temp2);
 	return 0;
 }
