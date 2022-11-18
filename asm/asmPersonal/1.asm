@@ -2,7 +2,7 @@
 
 section .data
 
-metka:
+ptrOnArrayA:
 arrayA dd 50,60,70,80
 X dd 25 ;ecx = 16
 Y dd 30
@@ -20,14 +20,13 @@ CMAIN:
 
     mov ebp, esp; for correct debugging
    
-    mov ebx, 0
     mov ecx, 16
     mov eax, 0
     mov edx, 0
     mov esi, 0
     mov edi, 0
     
-    mov eax, [metka + ecx] 
+    mov eax, [ptrOnArrayA + ecx] 
     mul eax
     mov ecx, 0
     
@@ -36,12 +35,12 @@ CMAIN:
       cmp ecx, 16
       je exitSummarizeA
       
-      adc ebx, [metka + ecx]
+      mov ebx, 0
+      adc ebx, [ptrOnArrayA + ecx]
       dec ebx
       imul ebx, eax
       adc esi, ebx
       adc ecx, 4
-      mov ebx, 0
       jmp summarizeArrayA
       
     exitSummarizeA:
@@ -51,7 +50,7 @@ CMAIN:
     PRINT_UDEC 4, esi
     NEWLINE
     adc ecx, 4
-    mov eax, [metka + ecx]
+    mov eax, [ptrOnArrayA + ecx]
   
     
     summarizeArrayB:
@@ -61,7 +60,7 @@ CMAIN:
       je exitSummarizeB
       
       mov ebx, 0
-      adc ebx, [metka + ecx]
+      adc ebx, [ptrOnArrayA + ecx]
       dec ebx
       imul ebx, eax
       adc edi, ebx
