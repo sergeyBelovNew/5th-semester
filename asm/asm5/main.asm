@@ -14,37 +14,44 @@ resb 1; 1 trash byte
 string2:
 resw 1
 
+
 section .text
 
 global CMAIN
 global runTask1
-global bitEqual
+global strEqual
+global strLenght
+global strReverse
 global clearGeneralPurposeRegisters
 
 CMAIN:
+
     mov ebp, esp; for correct debugging
-    
     call runTask1
-    
     ret
     
 runTask1:
     
     call clearGeneralPurposeRegisters
     GET_STRING string1, 8
+    ;int 21h
     GET_STRING string2, 8
+    ;int 21h
     PRINT_STRING string1
-    NEWLINE
     PRINT_STRING string2
     NEWLINE
-    ;call bitEqual
-    
+    call strEqual
+    NEWLINE
+    call strLenght
     ret 
     
-bitEqual:
+strEqual:
  
+    mov esi,string1
+    mov edi,string2
+    cld
     cmpsw 
-    jc   notEqualStrings
+    jnz notEqualStrings
     PRINT_STRING equal
     ret
     notEqualStrings:
@@ -60,3 +67,25 @@ clearGeneralPurposeRegisters:
     mov esi, 0
     mov edi, 0
     ret
+ 
+strLenght:
+
+    mov edi, string1
+    repne scasb
+    mov eax, ecx
+  
+    mov edi, string2
+    repne scasb
+   
+    cmp eax, ecx
+    jne notEquelLenght
+    PRINT_STRING equal
+    ret
+    notEquelLenght:
+    PRINT_STRING notEqual
+    ret
+    
+strReverse:
+
+
+ 
