@@ -17,24 +17,25 @@ resw 1
 
 section .text
 
-global CMAIN
-global runTask1
-global strEqual
-global strLenght
-global strReverse
-global clearGeneralPurposeRegisters
+entry  CMAIN
+proc runTask1
+proc strEqual
+proc strLenght
+proc strReverse
+proc clearGeneralPurposeRegisters
 
 CMAIN:
 
     mov ebp, esp; for correct debugging
     call runTask1
     ret
+    endp
     
 runTask1:
     
     call clearGeneralPurposeRegisters
     GET_STRING string1, 8
-      INT	21h
+    ;int 21h
     GET_STRING string2, 8
     ;int 21h
     PRINT_STRING string1
@@ -86,4 +87,3 @@ strLenght:
     ret
     
 strReverse:
-

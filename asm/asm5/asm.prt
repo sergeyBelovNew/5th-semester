@@ -1,0 +1,13 @@
+; FASM Editor
+
+include "entry.asm"
+
+if 2 * 2 = 5
+[options]
+  countAsm=2
+  countInc=0
+[asm]
+  asm1="entry.asm"
+  asm2="task1.asm"
+[inc]
+end if
