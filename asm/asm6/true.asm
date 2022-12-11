@@ -7,13 +7,13 @@ equal dw 'Equal'
 notEqual dw 'Not equal'
 section .bss
 
-string3:
+string1:
 resw  1
 
 temp:
 resb 1
 
-string4:
+string2:
 resw  1
 
 
@@ -35,10 +35,10 @@ CMAIN:
 runTask1:
     
     call clearGeneralPurposeRegisters
-    GET_STRING string3, 16
+    GET_STRING string1, 16
     GET_STRING temp, 8
-    GET_STRING string4, 16
-    PRINT_STRING string3
+    GET_STRING string2, 16
+    PRINT_STRING string1
    
     NEWLINE
     call strEqual
@@ -47,8 +47,8 @@ runTask1:
     
 strEqual:
  
-    mov esi, string3
-    mov edi, string4
+    mov esi, string1
+    mov edi, string2
     
     cmpsw 
     

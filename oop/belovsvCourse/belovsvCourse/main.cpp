@@ -17,8 +17,8 @@ void runTask() {
 	int age;
 	int choose;
 	string city;
-	vector <shared_ptr <Human>> vectors;
-	vectors = fillVectors(vectors);
+	vector <shared_ptr <Human>> humans;
+	humans = fillVectors(humans);
 	FunctionsForHumans* printer = new FunctionsForHumans;
 	cout << "Choose function:\n1)Print\n2)Sort age\n3)Sort name\n";
 	cout << "4)Search age\n5)Rewrite human(s) with current age\n6)Fstream\n7)Insert\n";
@@ -27,34 +27,34 @@ void runTask() {
 	while (choose != 9) {
 		switch (choose) {
 		case 1:
-			printer->printVectors(vectors);
+			printer->printVectors(humans);
 			break;
 		case 2:
-			printer->sortAge(vectors);
+			printer->sortAge(humans);
 			break;
 		case 3:
-			printer->sortName(vectors);
+			printer->sortName(humans);
 			break;
 		case 4:
 			cout << "Enter age: ";
 			cin >> age;
-			printer->searchAge(vectors, age);
+			printer->searchAge(humans, age);
 			break;
 		case 5:
 			cout << "Enter age: ";
 			cin >> age;
-			printer->rewriteByAge(vectors, 20);
+			printer->rewriteByAge(humans, 20);
 			break;
 		case 6:
-			printer->runFstream(vectors);
+			printer->runFstream(humans);
 			break;
 		case 7:
-			printer->insert(vectors);
+			printer->insert(humans);
 			break;
 		case 8:
 			cout << "Enter city: ";
 			cin >> city;
-			printer->printHumansInOneCity(vectors, city);
+			printer->printHumansInOneCity(humans, city);
 			break;
 		default:
 			break;
